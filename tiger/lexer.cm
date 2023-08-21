@@ -1,0 +1,6 @@
+Library
+    structure Lexer
+is
+    lexer.lex.sml (* Note: regenerate by running ml-lex lexer.lex *)
+    tokens.cm
+    $/basis.cm

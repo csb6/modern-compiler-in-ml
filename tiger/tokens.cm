@@ -1,0 +1,7 @@
+Library
+    signature Tiger_TOKENS
+    structure Tokens
+is
+    tokens.sig
+    tokens.sml
+    $/basis.cm
