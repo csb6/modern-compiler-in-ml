@@ -1,6 +1,7 @@
 type lexresult = Tokens.token
 
 exception UnclosedCommentError;
+exception UnknownEscapeSequenceError;
 
 val currLine = ref 1
 val currStr = ref ""
@@ -89,3 +90,4 @@ end
 <INSTRING> . => (appendStr yytext; lex());
 <INESCAPESEQ> "n" => (appendStr "\n"; YYBEGIN INSTRING; lex());
 <INESCAPESEQ> "t" => (appendStr "\t"; YYBEGIN INSTRING; lex());
+<INESCAPESEQ> . => (raise UnknownEscapeSequenceError);
