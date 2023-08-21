@@ -6,7 +6,16 @@ val currLine = ref 1
 val currStr = ref ""
 val commentNestLevel = ref 0
 fun appendStr s = currStr := !currStr ^ s
-fun eof () = if !commentNestLevel <> 0 then raise UnclosedCommentError else Tokens.EOF (!currLine, !currLine)
+fun eof () = let
+    val commentsClosed = !commentNestLevel = 0;
+    val finalLine = !currLine;
+in
+    (currLine := 1;
+    currStr := "";
+    commentNestLevel := 0;
+    if not commentsClosed then raise UnclosedCommentError
+    else Tokens.EOF (finalLine, finalLine))
+end
 
 %%
 
@@ -17,11 +26,16 @@ fun eof () = if !commentNestLevel <> 0 then raise UnclosedCommentError else Toke
 
 <INITIAL> "/*" => (YYBEGIN INCOMMENT; commentNestLevel := 1; lex());
 <INCOMMENT> "/*" => (commentNestLevel := !commentNestLevel + 1; lex());
-<INCOMMENT> "*/" => (if !commentNestLevel = 0 then (YYBEGIN INITIAL) else commentNestLevel := !commentNestLevel - 1; lex());
+<INCOMMENT> "*/" => (
+    commentNestLevel := !commentNestLevel - 1;
+    if !commentNestLevel = 0 then (YYBEGIN INITIAL) else ();
+    lex()
+);
+<INCOMMENT> \n => (currLine := !currLine + 1; lex());
 <INCOMMENT> . => (lex());
 
 <INITIAL> [\ \t\r]+ => (lex());
-<INITIAL,INCOMMENT> \n => (currLine := !currLine + 1; lex());
+<INITIAL> \n => (currLine := !currLine + 1; lex());
 
 <INITIAL> "while" => (Tokens.WHILE (!currLine, !currLine));
 <INITIAL> "for" => (Tokens.FOR (!currLine, !currLine));

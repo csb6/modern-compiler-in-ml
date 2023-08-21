@@ -10,7 +10,16 @@ val currLine = ref 1
 val currStr = ref ""
 val commentNestLevel = ref 0
 fun appendStr s = currStr := !currStr ^ s
-fun eof () = if !commentNestLevel <> 0 then raise UnclosedCommentError else Tokens.EOF (!currLine, !currLine)
+fun eof () = let
+    val commentsClosed = !commentNestLevel = 0;
+    val finalLine = !currLine;
+in
+    (currLine := 1;
+    currStr := "";
+    commentNestLevel := 0;
+    if not commentsClosed then raise UnclosedCommentError
+    else Tokens.EOF (finalLine, finalLine))
+end
 
 end (* end of user routines *)
 exception LexError (* raised if illegal leaf action tried *)
@@ -67,7 +76,7 @@ val s = [
 \\000"
 ),
  (7, 
-"\098\098\098\098\098\098\098\098\098\098\092\098\098\098\098\098\
+"\098\098\098\098\098\098\098\098\098\098\103\098\098\098\098\098\
 \\098\098\098\098\098\098\098\098\098\098\098\098\098\098\098\098\
 \\098\098\098\098\098\098\098\098\098\098\101\098\098\098\098\099\
 \\098\098\098\098\098\098\098\098\098\098\098\098\098\098\098\098\
@@ -611,100 +620,101 @@ in Vector.fromList(List.map g
 {fin = [], trans = 5},
 {fin = [], trans = 7},
 {fin = [], trans = 7},
-{fin = [(N 113)], trans = 0},
-{fin = [(N 142)], trans = 0},
-{fin = [(N 111)], trans = 0},
-{fin = [(N 145)], trans = 12},
-{fin = [(N 145)], trans = 13},
-{fin = [(N 145)], trans = 14},
-{fin = [(N 145)], trans = 15},
-{fin = [(N 145)], trans = 16},
-{fin = [(N 21),(N 145)], trans = 12},
-{fin = [(N 145)], trans = 18},
-{fin = [(N 145)], trans = 19},
-{fin = [(N 58),(N 145)], trans = 12},
-{fin = [(N 145)], trans = 21},
-{fin = [(N 145)], trans = 22},
-{fin = [(N 145)], trans = 23},
-{fin = [(N 63),(N 145)], trans = 12},
-{fin = [(N 28),(N 145)], trans = 12},
-{fin = [(N 145)], trans = 26},
-{fin = [(N 145)], trans = 27},
-{fin = [(N 77),(N 145)], trans = 12},
-{fin = [(N 145)], trans = 29},
-{fin = [(N 88),(N 145)], trans = 12},
-{fin = [(N 145)], trans = 31},
-{fin = [(N 145)], trans = 32},
-{fin = [(N 92),(N 145)], trans = 12},
-{fin = [(N 145)], trans = 34},
-{fin = [(N 145)], trans = 35},
-{fin = [(N 38),(N 145)], trans = 12},
-{fin = [(N 145)], trans = 37},
-{fin = [(N 41),(N 145)], trans = 12},
-{fin = [(N 72),(N 145)], trans = 12},
-{fin = [(N 145)], trans = 40},
-{fin = [(N 145)], trans = 41},
-{fin = [(N 145)], trans = 42},
-{fin = [(N 145)], trans = 43},
-{fin = [(N 145)], trans = 44},
-{fin = [(N 145)], trans = 45},
-{fin = [(N 145)], trans = 46},
-{fin = [(N 54),(N 145)], trans = 12},
-{fin = [(N 145)], trans = 48},
-{fin = [(N 25),(N 145)], trans = 12},
-{fin = [(N 145)], trans = 50},
-{fin = [(N 145)], trans = 51},
-{fin = [(N 45),(N 145)], trans = 12},
-{fin = [(N 145)], trans = 53},
-{fin = [(N 145)], trans = 54},
-{fin = [(N 82),(N 145)], trans = 12},
-{fin = [(N 145)], trans = 56},
-{fin = [(N 85),(N 145)], trans = 12},
-{fin = [(N 145)], trans = 58},
-{fin = [(N 145)], trans = 59},
-{fin = [(N 145)], trans = 60},
-{fin = [(N 145)], trans = 61},
-{fin = [(N 34),(N 145)], trans = 12},
-{fin = [(N 145)], trans = 63},
-{fin = [(N 145)], trans = 64},
-{fin = [(N 145)], trans = 65},
-{fin = [(N 145)], trans = 66},
-{fin = [(N 69),(N 145)], trans = 12},
-{fin = [(N 109)], trans = 0},
-{fin = [(N 107)], trans = 0},
-{fin = [(N 138)], trans = 70},
-{fin = [(N 134)], trans = 0},
-{fin = [(N 125)], trans = 0},
-{fin = [(N 136)], trans = 73},
-{fin = [(N 128)], trans = 0},
-{fin = [(N 131)], trans = 0},
-{fin = [(N 101)], trans = 0},
-{fin = [(N 99)], trans = 77},
-{fin = [(N 97)], trans = 0},
-{fin = [(N 148)], trans = 79},
-{fin = [(N 123)], trans = 80},
-{fin = [(N 2)], trans = 0},
 {fin = [(N 115)], trans = 0},
-{fin = [(N 119)], trans = 0},
-{fin = [(N 94)], trans = 0},
+{fin = [(N 144)], trans = 0},
+{fin = [(N 113)], trans = 0},
+{fin = [(N 147)], trans = 12},
+{fin = [(N 147)], trans = 13},
+{fin = [(N 147)], trans = 14},
+{fin = [(N 147)], trans = 15},
+{fin = [(N 147)], trans = 16},
+{fin = [(N 23),(N 147)], trans = 12},
+{fin = [(N 147)], trans = 18},
+{fin = [(N 147)], trans = 19},
+{fin = [(N 60),(N 147)], trans = 12},
+{fin = [(N 147)], trans = 21},
+{fin = [(N 147)], trans = 22},
+{fin = [(N 147)], trans = 23},
+{fin = [(N 65),(N 147)], trans = 12},
+{fin = [(N 30),(N 147)], trans = 12},
+{fin = [(N 147)], trans = 26},
+{fin = [(N 147)], trans = 27},
+{fin = [(N 79),(N 147)], trans = 12},
+{fin = [(N 147)], trans = 29},
+{fin = [(N 90),(N 147)], trans = 12},
+{fin = [(N 147)], trans = 31},
+{fin = [(N 147)], trans = 32},
+{fin = [(N 94),(N 147)], trans = 12},
+{fin = [(N 147)], trans = 34},
+{fin = [(N 147)], trans = 35},
+{fin = [(N 40),(N 147)], trans = 12},
+{fin = [(N 147)], trans = 37},
+{fin = [(N 43),(N 147)], trans = 12},
+{fin = [(N 74),(N 147)], trans = 12},
+{fin = [(N 147)], trans = 40},
+{fin = [(N 147)], trans = 41},
+{fin = [(N 147)], trans = 42},
+{fin = [(N 147)], trans = 43},
+{fin = [(N 147)], trans = 44},
+{fin = [(N 147)], trans = 45},
+{fin = [(N 147)], trans = 46},
+{fin = [(N 56),(N 147)], trans = 12},
+{fin = [(N 147)], trans = 48},
+{fin = [(N 27),(N 147)], trans = 12},
+{fin = [(N 147)], trans = 50},
+{fin = [(N 147)], trans = 51},
+{fin = [(N 47),(N 147)], trans = 12},
+{fin = [(N 147)], trans = 53},
+{fin = [(N 147)], trans = 54},
+{fin = [(N 84),(N 147)], trans = 12},
+{fin = [(N 147)], trans = 56},
+{fin = [(N 87),(N 147)], trans = 12},
+{fin = [(N 147)], trans = 58},
+{fin = [(N 147)], trans = 59},
+{fin = [(N 147)], trans = 60},
+{fin = [(N 147)], trans = 61},
+{fin = [(N 36),(N 147)], trans = 12},
+{fin = [(N 147)], trans = 63},
+{fin = [(N 147)], trans = 64},
+{fin = [(N 147)], trans = 65},
+{fin = [(N 147)], trans = 66},
+{fin = [(N 71),(N 147)], trans = 12},
+{fin = [(N 111)], trans = 0},
+{fin = [(N 109)], trans = 0},
+{fin = [(N 140)], trans = 70},
+{fin = [(N 136)], trans = 0},
+{fin = [(N 127)], trans = 0},
+{fin = [(N 138)], trans = 73},
+{fin = [(N 130)], trans = 0},
+{fin = [(N 133)], trans = 0},
+{fin = [(N 103)], trans = 0},
+{fin = [(N 101)], trans = 77},
+{fin = [(N 99)], trans = 0},
+{fin = [(N 150)], trans = 79},
+{fin = [(N 125)], trans = 80},
+{fin = [(N 2)], trans = 0},
 {fin = [(N 117)], trans = 0},
 {fin = [(N 121)], trans = 0},
+{fin = [(N 96)], trans = 0},
+{fin = [(N 119)], trans = 0},
+{fin = [(N 123)], trans = 0},
+{fin = [(N 107)], trans = 0},
 {fin = [(N 105)], trans = 0},
-{fin = [(N 103)], trans = 0},
-{fin = [(N 140)], trans = 0},
-{fin = [(N 150)], trans = 0},
-{fin = [(N 13)], trans = 91},
-{fin = [(N 15)], trans = 0},
-{fin = [(N 156)], trans = 0},
-{fin = [(N 154),(N 156)], trans = 0},
-{fin = [(N 152),(N 156)], trans = 0},
-{fin = [(N 160)], trans = 0},
+{fin = [(N 142)], trans = 0},
+{fin = [(N 152)], trans = 0},
+{fin = [(N 15)], trans = 91},
+{fin = [(N 17)], trans = 0},
 {fin = [(N 158)], trans = 0},
-{fin = [(N 10)], trans = 0},
-{fin = [(N 10)], trans = 99},
+{fin = [(N 156),(N 158)], trans = 0},
+{fin = [(N 154),(N 158)], trans = 0},
+{fin = [(N 162)], trans = 0},
+{fin = [(N 160)], trans = 0},
+{fin = [(N 12)], trans = 0},
+{fin = [(N 12)], trans = 99},
 {fin = [(N 5)], trans = 0},
-{fin = [(N 10)], trans = 101},
-{fin = [(N 8)], trans = 0}])
+{fin = [(N 12)], trans = 101},
+{fin = [(N 8)], trans = 0},
+{fin = [(N 10)], trans = 0}])
 end
 structure StartStates =
 	struct
@@ -749,60 +759,65 @@ let fun continue() = lex() in
 
 			(* Application actions *)
 
-  10 => (lex())
-| 101 => (Tokens.SEMICOLON (!currLine, !currLine))
-| 103 => (Tokens.LPAREN (!currLine, !currLine))
-| 105 => (Tokens.RPAREN (!currLine, !currLine))
-| 107 => (Tokens.LBRACK (!currLine, !currLine))
-| 109 => (Tokens.RBRACK (!currLine, !currLine))
-| 111 => (Tokens.LBRACE (!currLine, !currLine))
-| 113 => (Tokens.RBRACE (!currLine, !currLine))
-| 115 => (Tokens.DOT (!currLine, !currLine))
-| 117 => (Tokens.PLUS (!currLine, !currLine))
-| 119 => (Tokens.MINUS (!currLine, !currLine))
-| 121 => (Tokens.TIMES (!currLine, !currLine))
-| 123 => (Tokens.DIVIDE (!currLine, !currLine))
-| 125 => (Tokens.EQ (!currLine, !currLine))
-| 128 => (Tokens.NEQ (!currLine, !currLine))
-| 13 => (lex())
-| 131 => (Tokens.LE (!currLine, !currLine))
-| 134 => (Tokens.GE (!currLine, !currLine))
-| 136 => (Tokens.LT (!currLine, !currLine))
-| 138 => (Tokens.GT (!currLine, !currLine))
-| 140 => (Tokens.AND (!currLine, !currLine))
-| 142 => (Tokens.OR (!currLine, !currLine))
-| 145 => let val yytext=yymktext() in Tokens.ID (yytext, !currLine, !currLine) end
-| 148 => let val yytext=yymktext() in Tokens.INT (valOf (Int.fromString (yytext)), !currLine, !currLine) end
-| 15 => (currLine := !currLine + 1; lex())
-| 150 => (YYBEGIN INSTRING; currStr := ""; lex())
-| 152 => (YYBEGIN INITIAL; Tokens.STRING (!currStr, !currLine, !currLine))
-| 154 => (YYBEGIN INESCAPESEQ; lex())
-| 156 => let val yytext=yymktext() in appendStr yytext; lex() end
-| 158 => (appendStr "\n"; YYBEGIN INSTRING; lex())
-| 160 => (appendStr "\t"; YYBEGIN INSTRING; lex())
+  10 => (currLine := !currLine + 1; lex())
+| 101 => (Tokens.COLON (!currLine, !currLine))
+| 103 => (Tokens.SEMICOLON (!currLine, !currLine))
+| 105 => (Tokens.LPAREN (!currLine, !currLine))
+| 107 => (Tokens.RPAREN (!currLine, !currLine))
+| 109 => (Tokens.LBRACK (!currLine, !currLine))
+| 111 => (Tokens.RBRACK (!currLine, !currLine))
+| 113 => (Tokens.LBRACE (!currLine, !currLine))
+| 115 => (Tokens.RBRACE (!currLine, !currLine))
+| 117 => (Tokens.DOT (!currLine, !currLine))
+| 119 => (Tokens.PLUS (!currLine, !currLine))
+| 12 => (lex())
+| 121 => (Tokens.MINUS (!currLine, !currLine))
+| 123 => (Tokens.TIMES (!currLine, !currLine))
+| 125 => (Tokens.DIVIDE (!currLine, !currLine))
+| 127 => (Tokens.EQ (!currLine, !currLine))
+| 130 => (Tokens.NEQ (!currLine, !currLine))
+| 133 => (Tokens.LE (!currLine, !currLine))
+| 136 => (Tokens.GE (!currLine, !currLine))
+| 138 => (Tokens.LT (!currLine, !currLine))
+| 140 => (Tokens.GT (!currLine, !currLine))
+| 142 => (Tokens.AND (!currLine, !currLine))
+| 144 => (Tokens.OR (!currLine, !currLine))
+| 147 => let val yytext=yymktext() in Tokens.ID (yytext, !currLine, !currLine) end
+| 15 => (lex())
+| 150 => let val yytext=yymktext() in Tokens.INT (valOf (Int.fromString (yytext)), !currLine, !currLine) end
+| 152 => (YYBEGIN INSTRING; currStr := ""; lex())
+| 154 => (YYBEGIN INITIAL; Tokens.STRING (!currStr, !currLine, !currLine))
+| 156 => (YYBEGIN INESCAPESEQ; lex())
+| 158 => let val yytext=yymktext() in appendStr yytext; lex() end
+| 160 => (appendStr "\n"; YYBEGIN INSTRING; lex())
+| 162 => (appendStr "\t"; YYBEGIN INSTRING; lex())
+| 17 => (currLine := !currLine + 1; lex())
 | 2 => (YYBEGIN INCOMMENT; commentNestLevel := 1; lex())
-| 21 => (Tokens.WHILE (!currLine, !currLine))
-| 25 => (Tokens.FOR (!currLine, !currLine))
-| 28 => (Tokens.TO (!currLine, !currLine))
-| 34 => (Tokens.BREAK (!currLine, !currLine))
-| 38 => (Tokens.LET (!currLine, !currLine))
-| 41 => (Tokens.IN (!currLine, !currLine))
-| 45 => (Tokens.END (!currLine, !currLine))
+| 23 => (Tokens.WHILE (!currLine, !currLine))
+| 27 => (Tokens.FOR (!currLine, !currLine))
+| 30 => (Tokens.TO (!currLine, !currLine))
+| 36 => (Tokens.BREAK (!currLine, !currLine))
+| 40 => (Tokens.LET (!currLine, !currLine))
+| 43 => (Tokens.IN (!currLine, !currLine))
+| 47 => (Tokens.END (!currLine, !currLine))
 | 5 => (commentNestLevel := !commentNestLevel + 1; lex())
-| 54 => (Tokens.FUNCTION (!currLine, !currLine))
-| 58 => (Tokens.VAR (!currLine, !currLine))
-| 63 => (Tokens.TYPE (!currLine, !currLine))
-| 69 => (Tokens.ARRAY (!currLine, !currLine))
-| 72 => (Tokens.IF (!currLine, !currLine))
-| 77 => (Tokens.THEN (!currLine, !currLine))
-| 8 => (if !commentNestLevel = 0 then (YYBEGIN INITIAL) else commentNestLevel := !commentNestLevel - 1; lex())
-| 82 => (Tokens.ELSE (!currLine, !currLine))
-| 85 => (Tokens.DO (!currLine, !currLine))
-| 88 => (Tokens.OF (!currLine, !currLine))
-| 92 => (Tokens.NIL (!currLine, !currLine))
-| 94 => (Tokens.COMMA (!currLine, !currLine))
-| 97 => (Tokens.ASSIGN (!currLine, !currLine))
-| 99 => (Tokens.COLON (!currLine, !currLine))
+| 56 => (Tokens.FUNCTION (!currLine, !currLine))
+| 60 => (Tokens.VAR (!currLine, !currLine))
+| 65 => (Tokens.TYPE (!currLine, !currLine))
+| 71 => (Tokens.ARRAY (!currLine, !currLine))
+| 74 => (Tokens.IF (!currLine, !currLine))
+| 79 => (Tokens.THEN (!currLine, !currLine))
+| 8 => (
+    commentNestLevel := !commentNestLevel - 1;
+    if !commentNestLevel = 0 then (YYBEGIN INITIAL) else ();
+    lex()
+)
+| 84 => (Tokens.ELSE (!currLine, !currLine))
+| 87 => (Tokens.DO (!currLine, !currLine))
+| 90 => (Tokens.OF (!currLine, !currLine))
+| 94 => (Tokens.NIL (!currLine, !currLine))
+| 96 => (Tokens.COMMA (!currLine, !currLine))
+| 99 => (Tokens.ASSIGN (!currLine, !currLine))
 | _ => raise Internal.LexerError
 
 		) end )
