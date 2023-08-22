@@ -1,17 +1,21 @@
 type lexresult = Tokens.token
 
 datatype ErrorInfo = UnclosedComment
+                   | ImproperMultilineString
                    | UnknownEscapeSequence of string;
 
 exception LexerError of ErrorInfo * Tokens.linenum
 
 val currLine = ref 1
 val currStr = ref ""
+val strStartLine = ref 1
 val commentNestLevel = ref 0
 fun appendStr s = currStr := !currStr ^ s
+fun incr v = v := !v + 1
 fun resetState () = (
     currLine := 1;
     currStr := "";
+    strStartLine := 1;
     commentNestLevel := 0
 )
 fun raiseError info linenum = (resetState(); raise LexerError (info, linenum))
@@ -27,22 +31,22 @@ end
 %%
 
 %structure Lexer
-%s INSTRING INESCAPESEQ INCOMMENT;
+%s INSTRING INESCAPESEQ INCOMMENT INMULTISTRING;
 
 %%
 
 <INITIAL> "/*" => (YYBEGIN INCOMMENT; commentNestLevel := 1; lex());
-<INCOMMENT> "/*" => (commentNestLevel := !commentNestLevel + 1; lex());
+<INCOMMENT> "/*" => (incr commentNestLevel; lex());
 <INCOMMENT> "*/" => (
     commentNestLevel := !commentNestLevel - 1;
     if !commentNestLevel = 0 then (YYBEGIN INITIAL) else ();
     lex()
 );
-<INCOMMENT> \n => (currLine := !currLine + 1; lex());
+<INCOMMENT> \n => (incr currLine; lex());
 <INCOMMENT> . => (lex());
 
 <INITIAL> [\ \t\r]+ => (lex());
-<INITIAL> \n => (currLine := !currLine + 1; lex());
+<INITIAL> \n => (incr currLine; lex());
 
 <INITIAL> "while" => (Tokens.WHILE (!currLine, !currLine));
 <INITIAL> "for" => (Tokens.FOR (!currLine, !currLine));
@@ -90,10 +94,21 @@ end
 
 <INITIAL> [0-9]+ => (Tokens.INT (valOf (Int.fromString (yytext)), !currLine, !currLine));
 
-<INITIAL> "\"" => (YYBEGIN INSTRING; currStr := ""; lex());
-<INSTRING> "\"" => (YYBEGIN INITIAL; Tokens.STRING (!currStr, !currLine, !currLine));
+<INITIAL> "\"" => (YYBEGIN INSTRING; currStr := ""; strStartLine := !currLine; lex());
+<INSTRING> "\"" => (YYBEGIN INITIAL; Tokens.STRING (!currStr, !strStartLine, !currLine));
 <INSTRING> "\\" => (YYBEGIN INESCAPESEQ; lex());
 <INSTRING> . => (appendStr yytext; lex());
-<INESCAPESEQ> "n" => (appendStr "\n"; YYBEGIN INSTRING; lex());
-<INESCAPESEQ> "t" => (appendStr "\t"; YYBEGIN INSTRING; lex());
+
+<INESCAPESEQ> "n" => (YYBEGIN INSTRING; appendStr "\n"; lex());
+<INESCAPESEQ> "r" => (YYBEGIN INSTRING; appendStr "\r"; lex());
+<INESCAPESEQ> "t" => (YYBEGIN INSTRING; appendStr "\t"; lex());
+<INESCAPESEQ> "\"" => (YYBEGIN INSTRING; appendStr "\""; lex());
+<INESCAPESEQ> "\\" => (YYBEGIN INSTRING; appendStr "\\"; lex());
+<INESCAPESEQ> [\ \t\r] => (YYBEGIN INMULTISTRING; lex());
+<INESCAPESEQ> "\n" => (YYBEGIN INMULTISTRING; incr currLine; lex());
 <INESCAPESEQ> . => (raiseError (UnknownEscapeSequence yytext) (!currLine));
+
+<INMULTISTRING> "\\" => (YYBEGIN INSTRING; lex());
+<INMULTISTRING> "\n" => (incr currLine; lex());
+<INMULTISTRING> [\ \t\r] => (lex());
+<INMULTISTRING> . => (raiseError ImproperMultilineString (!currLine));

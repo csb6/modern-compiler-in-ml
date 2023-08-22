@@ -17,6 +17,8 @@ structure Parse = struct
         run() handle
             (L.LexerError (L.UnclosedComment, linenum)) =>
                 printError linenum "Unclosed comment"
+          | (L.LexerError (L.ImproperMultilineString, linenum)) =>
+                printError linenum "Improperly formatted multiline string"
           | (L.LexerError (L.UnknownEscapeSequence seq, linenum)) =>
                 printError linenum ("Unknown escape sequence: '\\" ^ seq ^ "'");
 	  	TextIO.closeIn file

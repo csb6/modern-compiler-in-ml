@@ -1,0 +1,7 @@
+/* Basic escape codes */
+"\n\t\"\\"
+
+/* Multiline strings */
+"hello there \ 
+
+\my good friend!"
