@@ -1,4 +1,8 @@
 structure Parse = struct
+	structure L = Lexer.UserDeclarations
+
+	fun printError linenum msg = print ("Error: Line " ^ (Int.toString linenum) ^ ": " ^ msg ^ "\n")
+
 	fun parse filename = let
 		val file = TextIO.openIn filename
 	  	fun get _ = TextIO.input file
@@ -10,7 +14,11 @@ structure Parse = struct
 			if substring(t, 0, 3) = "EOF" then () else run()
 	    end
     in
-		run();
+        run() handle
+            (L.LexerError (L.UnclosedComment, linenum)) =>
+                printError linenum "Unclosed comment"
+          | (L.LexerError (L.UnknownEscapeSequence seq, linenum)) =>
+                printError linenum ("Unknown escape sequence: '\\" ^ seq ^ "'");
 	  	TextIO.closeIn file
     end
 end

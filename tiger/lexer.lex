@@ -1,21 +1,27 @@
 type lexresult = Tokens.token
 
-exception UnclosedCommentError;
-exception UnknownEscapeSequenceError;
+datatype ErrorInfo = UnclosedComment
+                   | UnknownEscapeSequence of string;
+
+exception LexerError of ErrorInfo * Tokens.linenum
 
 val currLine = ref 1
 val currStr = ref ""
 val commentNestLevel = ref 0
 fun appendStr s = currStr := !currStr ^ s
+fun resetState () = (
+    currLine := 1;
+    currStr := "";
+    commentNestLevel := 0
+)
+fun raiseError info linenum = (resetState(); raise LexerError (info, linenum))
 fun eof () = let
     val commentsClosed = !commentNestLevel = 0;
     val finalLine = !currLine;
 in
-    (currLine := 1;
-    currStr := "";
-    commentNestLevel := 0;
-    if not commentsClosed then raise UnclosedCommentError
-    else Tokens.EOF (finalLine, finalLine))
+    resetState();
+    if not commentsClosed then raise LexerError (UnclosedComment, finalLine)
+    else Tokens.EOF (finalLine, finalLine)
 end
 
 %%
@@ -90,4 +96,4 @@ end
 <INSTRING> . => (appendStr yytext; lex());
 <INESCAPESEQ> "n" => (appendStr "\n"; YYBEGIN INSTRING; lex());
 <INESCAPESEQ> "t" => (appendStr "\t"; YYBEGIN INSTRING; lex());
-<INESCAPESEQ> . => (raise UnknownEscapeSequenceError);
+<INESCAPESEQ> . => (raiseError (UnknownEscapeSequence yytext) (!currLine));
