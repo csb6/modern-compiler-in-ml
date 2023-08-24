@@ -21,7 +21,7 @@ structure Parse = struct
                 printError linenum "Improperly formatted multiline string"
           | (L.LexerError (L.UnknownEscapeSequence seq, linenum)) =>
                 printError linenum ("Unknown escape sequence: '\\" ^ seq ^ "'");
-	  	TextIO.closeIn file
+        TextIO.closeIn file
     end
 end
 
