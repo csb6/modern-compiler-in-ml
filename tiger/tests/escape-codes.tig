@@ -1,7 +1,10 @@
-/* Basic escape codes */
-"\n\t\"\\"
+let
+in
+    /* Basic escape codes */
+    "\n\t\"\\"
 
-/* Multiline strings */
-"hello there \ 
+    /* Multiline strings */
+    "hello there \ 
 
-\my good friend!"
+    \my good friend!"
+end
