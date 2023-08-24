@@ -1,7 +1,5 @@
 Library
     signature Tiger_TOKENS
-    structure Tokens
 is
-    tokens.sig
-    tokens.sml
-    $/basis.cm
+    tiger.grm.sig
+    $/ml-yacc-lib.cm

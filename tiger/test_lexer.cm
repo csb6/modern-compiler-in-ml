@@ -1,0 +1,9 @@
+Library
+    structure TestLexer
+is
+    driver.sml
+    tokens_prettyprint.sml
+    lexer.cm
+    tokens.cm
+    $/ml-yacc-lib.cm
+    $/basis.cm

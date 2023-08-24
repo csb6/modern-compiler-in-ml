@@ -1,9 +1,10 @@
-structure Tokens : Tiger_TOKENS = struct
+structure Tokens_PrettyPrint : Tiger_TOKENS = struct
     (* A "scaffold" structure for debugging lexers. *)
-    type linenum = int
-    type token = string
+    datatype ('a, 'b) token = Token of int * string
+    type svalue = string
 
-    fun TYPE(i,j) = "TYPE   " ^ Int.toString(i)
+    fun UMINUS(i,j) = "UMINUS   " ^ Int.toString(i)
+    fun TYPE(i,j) = ("TYPE   " ^ Int.toString(i), i)
     fun VAR(i,j) = "VAR   " ^ Int.toString(i)
     fun FUNCTION(i,j) = "FUNCTION   " ^ Int.toString(i)
     fun BREAK(i,j) = "BREAK   " ^ Int.toString(i)

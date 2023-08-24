@@ -1,14 +1,17 @@
-structure Lexer=
+functor TigerLexerFun(structure Tokens : Tiger_TOKENS)=
    struct
     structure UserDeclarations =
       struct
-type lexresult = Tokens.token
+type pos = int
+type svalue = Tokens.svalue
+type ('a,'b) token = ('a,'b) Tokens.token
+type lexresult  = (svalue,pos) token
 
 datatype ErrorInfo = UnclosedComment
                    | ImproperMultilineString
                    | UnknownEscapeSequence of string;
 
-exception LexerError of ErrorInfo * Tokens.linenum
+exception LexerError of ErrorInfo * int
 
 val currLine = ref 1
 val currStr = ref ""

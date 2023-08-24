@@ -1,6 +1,6 @@
 Library
-    structure Lexer
+    functor TigerLexerFun
 is
-    lexer.lex.sml (* Note: regenerate by running ml-lex lexer.lex *)
+    tiger.lex.sml
     tokens.cm
     $/basis.cm

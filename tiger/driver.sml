@@ -1,9 +1,10 @@
-structure Parse = struct
+structure TestLexer = struct
+	structure Lexer = LexerFun(Tokens_PrettyPrint)
 	structure L = Lexer.UserDeclarations
 
 	fun printError linenum msg = print ("Error: Line " ^ (Int.toString linenum) ^ ": " ^ msg ^ "\n")
 
-	fun parse filename = let
+	fun lex filename = let
 		val file = TextIO.openIn filename
 	  	fun get _ = TextIO.input file
 	  	val lexer = Lexer.makeLexer get
