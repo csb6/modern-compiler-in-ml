@@ -6,7 +6,7 @@ structure Tiger = struct
                                   structure LrParser = LrParser )
     structure L = TigerLexer.UserDeclarations
 
-	fun printError linenum msg = print ("Error: Line " ^ (Int.toString linenum) ^ ": " ^ msg ^ "\n")
+    fun printError linenum msg = print ("Error: Line " ^ (Int.toString linenum) ^ ": " ^ msg ^ "\n")
 
     fun printParseError (msg, startLine, endLine) =
         let
@@ -17,14 +17,10 @@ structure Tiger = struct
         end
 
     fun parse filename = let
-		val file = TextIO.openIn filename
-	  	fun get _ = TextIO.input file
-	  	val lexer = TigerParser.makeLexer get
-	  	fun run() = let
-	    in
-            TigerParser.parse (0, lexer, printParseError, ());
-            ()
-	    end
+        val file = TextIO.openIn filename
+          fun get _ = TextIO.input file
+          val lexer = TigerParser.makeLexer get
+          fun run() = (TigerParser.parse (0, lexer, printParseError, ()))
     in
         run() handle
             (L.LexerError (L.UnclosedComment, linenum)) =>

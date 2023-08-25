@@ -1,0 +1,7 @@
+version = 1
+[workspace]
+root = "parser.cm"
+[diagnostics]
+5001.severity = "ignore"
+5003.severity = "ignore"
+5028.severity = "warning"
