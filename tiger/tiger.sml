@@ -18,9 +18,9 @@ structure Tiger = struct
 
     fun parse filename = let
         val file = TextIO.openIn filename
-          fun get _ = TextIO.input file
-          val lexer = TigerParser.makeLexer get
-          fun run() = (TigerParser.parse (0, lexer, printParseError, ()))
+        fun get _ = TextIO.input file
+        val lexer = TigerParser.makeLexer get
+        fun run() = (TigerParser.parse (0, lexer, printParseError, ()); ())
     in
         run() handle
             (L.LexerError (L.UnclosedComment, linenum)) =>
@@ -33,5 +33,33 @@ structure Tiger = struct
                 print "Parsing failed\n";
         TextIO.closeIn file
     end
+
+    val // = OS.Path.concat
+    infix //
+
+    fun runTest testFile = (
+        print ("Running: " ^ testFile ^ "...\n");
+        parse testFile;
+        print "\n"
+    )
+
+    fun runTests testDir = let
+        val tests = OS.FileSys.openDir testDir
+        fun visit () = case OS.FileSys.readDir tests of
+            NONE          => ()
+          | SOME testFile => (
+                runTest (testDir // testFile);
+                visit ()
+            )
+    in
+        visit ();
+        OS.FileSys.closeDir tests
+    end
+
+    fun runAllTests () = (
+        runTests ("tests" // "syntax");
+        runTests ("tests" // "semantics");
+        print "Done running tests\n"
+    )
 
 end
