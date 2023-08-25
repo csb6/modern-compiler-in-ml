@@ -63,7 +63,7 @@ FIELD : ID EQ EXP ()
 FIELDS : FIELDS COMMA FIELD ()
        | FIELD ()
 
-(* S/R conflict: OK (shifts over LBRACE instead of reducing to ID, which is expected) *)
+(* S/R conflict: OK (shifts over LBRACK instead of reducing to ID, which is expected) *)
 ARRAYCREATE : ID LBRACK EXP RBRACK OF EXP ()
 
 RECORDCREATE : ID LBRACE FIELDS RBRACE ()
@@ -87,10 +87,10 @@ BINEXP : EXP OR EXP ()
 EXPSEQ : EXP SEMICOLON EXP ()
 
 FUNCALL : ID LPAREN FUNARGS RPAREN ()
+        | ID LPAREN RPAREN ()
 
 FUNARGS : FUNARGS COMMA EXP ()
         | EXP ()
-        |  ()
 
 LETEXP : LET DECS IN EXP END ()
        | LET DECS IN END ()

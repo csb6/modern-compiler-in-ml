@@ -113,5 +113,5 @@ end
 
 <INMULTISTRING> "\\" => (YYBEGIN INSTRING; lex());
 <INMULTISTRING> "\n" => (incr currLine; lex());
-<INMULTISTRING> [\ \t\r] => (lex());
+<INMULTISTRING> [\ \t\r]+ => (lex());
 <INMULTISTRING> . => (raiseError ImproperMultilineString (!currLine));

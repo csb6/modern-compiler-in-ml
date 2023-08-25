@@ -1,7 +1,7 @@
 let
 in
     /* Basic escape codes */
-    "\n\t\"\\"
+    "\n\t\"\\";
 
     /* Multiline strings */
     "hello there \ 
