@@ -100,9 +100,9 @@ val table=let val actionRows =
 \\001\000\026\000\145\000\000\000\
 \\001\000\032\000\081\000\043\000\080\000\000\000\
 \\001\000\032\000\097\000\040\000\096\000\000\000\
-\\001\000\032\000\139\000\040\000\128\000\000\000\
+\\001\000\032\000\139\000\000\000\
 \\001\000\036\000\095\000\040\000\094\000\000\000\
-\\001\000\036\000\129\000\040\000\128\000\000\000\
+\\001\000\036\000\129\000\000\000\
 \\001\000\037\000\113\000\000\000\
 \\001\000\039\000\130\000\000\000\
 \\001\000\039\000\141\000\000\000\
@@ -228,7 +228,7 @@ val table=let val actionRows =
 \\038\000\033\000\000\000\
 \\212\000\000\000\
 \\213\000\000\000\
-\\214\000\000\000\
+\\214\000\040\000\128\000\000\000\
 \\215\000\043\000\121\000\000\000\
 \\216\000\000\000\
 \\217\000\000\000\
@@ -1168,14 +1168,15 @@ end; ()))
  in ( LrTable.NT 7, ( result, FUNCTION1left, EXP1right), rest671)
 end
 |  ( 64, ( ( _, ( MlyValue.ID ID2, _, ID2right)) :: _ :: ( _, ( 
-MlyValue.ID ID1, _, _)) :: _ :: ( _, ( MlyValue.ntVOID TYFIELDS1, 
-TYFIELDS1left, _)) :: rest671)) => let val  result = MlyValue.ntVOID
- (fn _ => ( let val  TYFIELDS1 = TYFIELDS1 ()
+MlyValue.ID ID1, _, _)) :: _ :: ( _, ( MlyValue.ntVOID TYFIELDLIST1, 
+TYFIELDLIST1left, _)) :: rest671)) => let val  result = 
+MlyValue.ntVOID (fn _ => ( let val  TYFIELDLIST1 = TYFIELDLIST1 ()
  val  ID1 = ID1 ()
  val  ID2 = ID2 ()
  in ()
 end; ()))
- in ( LrTable.NT 24, ( result, TYFIELDS1left, ID2right), rest671)
+ in ( LrTable.NT 24, ( result, TYFIELDLIST1left, ID2right), rest671)
+
 end
 |  ( 65, ( ( _, ( MlyValue.ID ID2, _, ID2right)) :: _ :: ( _, ( 
 MlyValue.ID ID1, ID1left, _)) :: rest671)) => let val  result = 
