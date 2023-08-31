@@ -5,5 +5,7 @@ is
     tiger.grm.sml
     lexer.cm
     tokens.cm
+    absyn.sml
+    $/smlnj-lib.cm
     $/ml-yacc-lib.cm
     $/basis.cm
