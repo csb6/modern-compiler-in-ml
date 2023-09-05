@@ -3,11 +3,11 @@ type svalue = Tokens.svalue
 type ('a,'b) token = ('a,'b) Tokens.token
 type lexresult  = (svalue,pos) token
 
-datatype ErrorInfo = UnclosedComment
-                   | ImproperMultilineString
-                   | UnknownEscapeSequence of string;
+datatype error_info = UnclosedComment
+                    | ImproperMultilineString
+                    | UnknownEscapeSequence of string;
 
-exception LexerError of ErrorInfo * int
+exception LexerError of error_info * int
 
 val currLine = ref 1
 val currStr = ref ""
