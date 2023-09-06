@@ -157,7 +157,7 @@ TY : ID                     (A.NameTy (addSymbol ID, defaultPos))
    | ARRAY OF ID            (A.ArrayTy (addSymbol ID, defaultPos))
 
 TYFIELDLIST : TYFIELDLIST COMMA ID COLON ID ({name=addSymbol ID1, escape=ref false, typ=addSymbol ID2, pos=defaultPos}::TYFIELDLIST)
-            | ID COLON ID                   ([])
+            | ID COLON ID                   ([{name=addSymbol ID1, escape=ref false, typ=addSymbol ID2, pos=defaultPos}])
 
 TYFIELDS : TYFIELDLIST (rev TYFIELDLIST)
          |             ([])

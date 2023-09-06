@@ -1127,8 +1127,11 @@ MlyValue.TYFIELDLIST (
  in ( LrTable.NT 7, ( result, TYFIELDLIST1left, ID2right), rest671)
 
 end
-|  ( 71, ( ( _, ( _, _, ID2right)) :: _ :: ( _, ( _, ID1left, _)) :: 
-rest671)) => let val  result = MlyValue.TYFIELDLIST ([])
+|  ( 71, ( ( _, ( MlyValue.ID ID2, _, ID2right)) :: _ :: ( _, ( 
+MlyValue.ID ID1, ID1left, _)) :: rest671)) => let val  result = 
+MlyValue.TYFIELDLIST (
+[{name=addSymbol ID1, escape=ref false, typ=addSymbol ID2, pos=defaultPos}]
+)
  in ( LrTable.NT 7, ( result, ID1left, ID2right), rest671)
 end
 |  ( 72, ( ( _, ( MlyValue.TYFIELDLIST TYFIELDLIST, TYFIELDLIST1left, 
