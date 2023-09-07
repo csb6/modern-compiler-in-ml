@@ -3,8 +3,7 @@ structure A = Absyn
 val symbols = ref AtomSet.empty
 
 fun addSymbol s = let
-    val a = Atom.atom s
-in
+    val a = Atom.atom s in
     case AtomSet.find (fn item => Atom.compare (item, a) = EQUAL) (!symbols) of
        NONE      => (symbols := AtomSet.add (!symbols, a); a)
      | SOME item => item

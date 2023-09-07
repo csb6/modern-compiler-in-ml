@@ -9,13 +9,11 @@ structure Tiger = struct
 
     fun printError linenum msg = print ("Error: Line " ^ (Int.toString linenum) ^ ": " ^ msg ^ "\n")
 
-    fun printParseError (msg, startLine, endLine) =
-        let
-            val lineLabel = if startLine = endLine then "Line " ^ (Int.toString startLine)
-                            else "Lines " ^ (Int.toString startLine) ^ "-" ^ (Int.toString endLine)
-        in
-            print ("Error: " ^ lineLabel ^ ": " ^ msg ^ "\n")
-        end
+    fun printParseError (msg, startLine, endLine) = let
+        val lineLabel = if startLine = endLine then "Line " ^ (Int.toString startLine)
+                        else "Lines " ^ (Int.toString startLine) ^ "-" ^ (Int.toString endLine) in
+        print ("Error: " ^ lineLabel ^ ": " ^ msg ^ "\n")
+    end
 
     fun indent 0 = ""
       | indent lvl = " " ^ (indent (lvl-1))
@@ -66,8 +64,7 @@ structure Tiger = struct
         fun get _ = TextIO.input file
         val lexer = TigerParser.makeLexer get
         fun run() = let
-            val result = TigerParser.parse (0, lexer, printParseError, ())
-        in
+            val result = TigerParser.parse (0, lexer, printParseError, ()) in
             TextIO.closeIn file; result
         end
     in
