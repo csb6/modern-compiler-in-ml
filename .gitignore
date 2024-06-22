@@ -1,2 +1,5 @@
 tiger/.cm
 tiger/*.grm.desc
+tiger/*.lex.sml
+tiger/*.grm.sml
+tiger/*.grm.sig

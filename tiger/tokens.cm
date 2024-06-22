@@ -1,5 +1,0 @@
-Library
-    signature Tiger_TOKENS
-is
-    tiger.grm.sig
-    $/ml-yacc-lib.cm

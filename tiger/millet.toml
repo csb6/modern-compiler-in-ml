@@ -1,6 +1,6 @@
 version = 1
 [workspace]
-root = "parser.cm"
+root = "tiger.cm"
 [diagnostics]
 5001.severity = "ignore"
 5003.severity = "ignore"

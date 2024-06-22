@@ -2,9 +2,8 @@ Library
     structure Tiger
 is
     tiger.sml
-    tiger.grm.sml
-    lexer.cm
-    tokens.cm
+    tiger.grm
+    tiger.lex
     absyn.sml
     $/smlnj-lib.cm
     $/ml-yacc-lib.cm

@@ -1,6 +1,0 @@
-Library
-    functor TigerLexerFun
-is
-    tiger.lex.sml
-    tokens.cm
-    $/basis.cm
