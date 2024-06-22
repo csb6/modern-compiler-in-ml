@@ -1,10 +1,4 @@
 structure Tiger = struct
-    structure TigerLrVals = TigerLrValsFun( structure Token = LrParser.Token )
-    structure TigerLexer = TigerLexerFun( structure Tokens = TigerLrVals.Tokens )
-    structure TigerParser = Join( structure ParserData = TigerLrVals.ParserData
-                                  structure Lex = TigerLexer
-                                  structure LrParser = LrParser )
-    structure L = TigerLexer.UserDeclarations
     structure A = Absyn
 
     fun printError linenum msg = print ("Error: Line " ^ (Int.toString linenum) ^ ": " ^ msg ^ "\n")
@@ -69,11 +63,11 @@ structure Tiger = struct
         end
     in
         SOME (run()) handle
-            (L.LexerError (L.UnclosedComment, linenum)) =>
+            (TigerParser.LexerError (TigerParser.UnclosedComment, linenum)) =>
                 (printError linenum "Unclosed comment"; NONE)
-            | (L.LexerError (L.ImproperMultilineString, linenum)) =>
+            | (TigerParser.LexerError (TigerParser.ImproperMultilineString, linenum)) =>
                 (printError linenum "Improperly formatted multiline string"; NONE)
-            | (L.LexerError (L.UnknownEscapeSequence seq, linenum)) =>
+            | (TigerParser.LexerError (TigerParser.UnknownEscapeSequence seq, linenum)) =>
                 (printError linenum ("Unknown escape sequence: '\\" ^ seq ^ "'"); NONE)
             | TigerParser.ParseError =>
                 (print "Parsing failed\n"; NONE)

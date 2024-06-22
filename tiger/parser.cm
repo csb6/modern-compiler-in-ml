@@ -1,0 +1,11 @@
+Library
+    structure TigerParser
+    structure Absyn
+is
+    parser.sml
+    absyn.sml
+    tiger.lex
+    tiger.grm
+    $/smlnj-lib.cm
+    $/ml-yacc-lib.cm
+    $/basis.cm
