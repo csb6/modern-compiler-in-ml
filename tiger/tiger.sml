@@ -1,6 +1,4 @@
 structure Tiger = struct
-    structure A = Absyn
-
     fun printError linenum msg = print ("Error: Line " ^ (Int.toString linenum) ^ ": " ^ msg ^ "\n")
 
     fun printParseError (msg, startLine, endLine) = let
@@ -9,7 +7,7 @@ structure Tiger = struct
         print ("Error: " ^ lineLabel ^ ": " ^ msg ^ "\n")
     end
 
-    fun parse filename = let 
+    fun parse filename = let
         val file = TextIO.openIn filename
         fun get _ = TextIO.input file
         val lexer = TigerParser.makeLexer get
@@ -19,14 +17,8 @@ structure Tiger = struct
         end
     in
         SOME (run()) handle
-            (TigerParser.LexerError (TigerParser.UnclosedComment, linenum)) =>
-                (printError linenum "Unclosed comment"; NONE)
-            | (TigerParser.LexerError (TigerParser.ImproperMultilineString, linenum)) =>
-                (printError linenum "Improperly formatted multiline string"; NONE)
-            | (TigerParser.LexerError (TigerParser.UnknownEscapeSequence seq, linenum)) =>
-                (printError linenum ("Unknown escape sequence: '\\" ^ seq ^ "'"); NONE)
-            | TigerParser.ParseError =>
-                (print "Parsing failed\n"; NONE)
+            TigerParser.LexerError (msg, linenum) => (printError linenum msg; NONE)
+          | TigerParser.ParseError                => (print "Parsing failed\n"; NONE)
     end
 
     fun prettyPrint NONE = ()

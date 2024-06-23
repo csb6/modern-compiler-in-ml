@@ -3,11 +3,7 @@ type svalue = Tokens.svalue
 type ('a,'b) token = ('a,'b) Tokens.token
 type lexresult  = (svalue,pos) token
 
-datatype error_info = UnclosedComment
-                    | ImproperMultilineString
-                    | UnknownEscapeSequence of string;
-
-exception LexerError of error_info * int
+exception LexerError of string * int
 
 val currLine = ref 1
 val currStr = ref ""
@@ -21,13 +17,13 @@ fun resetState () = (
     strStartLine := 1;
     commentNestLevel := 0
 )
-fun raiseError info linenum = (resetState(); raise LexerError (info, linenum))
+fun raiseError msg linenum = (resetState(); raise LexerError (msg, linenum))
 fun eof () = let
     val commentsClosed = !commentNestLevel = 0;
     val finalLine = !currLine;
 in
     resetState();
-    if not commentsClosed then raise LexerError (UnclosedComment, finalLine)
+    if not commentsClosed then raise LexerError ("Unclosed comment", finalLine)
     else Tokens.EOF (finalLine, finalLine)
 end
 
@@ -109,9 +105,9 @@ end
 <INESCAPESEQ> "\\" => (YYBEGIN INSTRING; appendStr "\\"; lex());
 <INESCAPESEQ> [\ \t\r] => (YYBEGIN INMULTISTRING; lex());
 <INESCAPESEQ> "\n" => (YYBEGIN INMULTISTRING; incr currLine; lex());
-<INESCAPESEQ> . => (raiseError (UnknownEscapeSequence yytext) (!currLine));
+<INESCAPESEQ> . => (raiseError ("Unrecognized escape sequence: '\\" ^ yytext ^ "'") (!currLine));
 
 <INMULTISTRING> "\\" => (YYBEGIN INSTRING; lex());
 <INMULTISTRING> "\n" => (incr currLine; lex());
 <INMULTISTRING> [\ \t\r]+ => (lex());
-<INMULTISTRING> . => (raiseError ImproperMultilineString (!currLine));
+<INMULTISTRING> . => (raiseError ("Unexpected content in multiline string: '" ^ yytext ^ "'") (!currLine));

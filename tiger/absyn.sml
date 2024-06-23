@@ -39,7 +39,7 @@ and ty = NameTy of symbol * pos
 and oper = PlusOp | MinusOp | TimesOp | DivideOp
          | EqOp | NeqOp | LtOp | LeOp | GtOp | GeOp
 
-withtype field = {name: symbol, escape: bool ref, 
+withtype field = {name: symbol, escape: bool ref,
                   typ: symbol, pos: pos}
    and   fundec = {name: symbol,
                    params: field list,
