@@ -1,0 +1,4 @@
+/* break expression is only allowed inside loops */
+let in
+    break
+end

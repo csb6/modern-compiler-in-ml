@@ -27,7 +27,7 @@ and exp = VarExp of var
 and dec = FunctionDec of fundec list
         | VarDec of {name: symbol,
                      escape: bool ref,
-                     typ: (symbol * pos) option,
+                     typ: symbol option,
                      init: exp,
                      pos: pos}
         | TypeDec of tydec list
@@ -43,7 +43,7 @@ withtype field = {name: symbol, escape: bool ref,
                   typ: symbol, pos: pos}
    and   fundec = {name: symbol,
                    params: field list,
-                   result: (symbol * pos) option,
+                   result: symbol option,
                    body: exp,
                    pos: pos}
    and   tydec = {name: symbol, ty: ty, pos: pos}

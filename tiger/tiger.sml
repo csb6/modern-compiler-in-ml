@@ -12,13 +12,17 @@ structure Tiger = struct
         fun get _ = TextIO.input file
         val lexer = TigerParser.makeLexer get
         fun run() = let
-            val result = TigerParser.parse (0, lexer, printParseError, ()) in
-            TextIO.closeIn file; result
+            val (result, _) = TigerParser.parse (0, lexer, printParseError, ())
+        in
+            Semantic.typeCheck result;
+            TextIO.closeIn file;
+            result
         end
     in
         SOME (run()) handle
             TigerParser.LexerError (msg, linenum) => (printError linenum msg; NONE)
           | TigerParser.ParseError                => (print "Parsing failed\n"; NONE)
+          | Semantic.SemanticError (msg, linenum) => (printError linenum msg; NONE)
     end
 
     fun prettyPrint NONE = ()

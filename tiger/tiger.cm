@@ -3,5 +3,8 @@ Library
 is
     tiger.sml
     parser.cm
+    env.sml
+    types.sml
+    semantic.sml
     $/smlnj-lib.cm
     $/basis.cm

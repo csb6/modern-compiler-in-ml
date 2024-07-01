@@ -1,0 +1,7 @@
+/* permissible break from inside loop */
+let
+    function foo() = while 1 do
+        break
+in
+    foo()
+end

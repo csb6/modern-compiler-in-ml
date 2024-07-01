@@ -1,0 +1,9 @@
+/* functions declared at a scope within a loop are not allowed to have break in them (unless there is a new loop)  */
+let
+in
+    while 1 do let
+        function foo() = break
+    in
+        foo()
+    end
+end

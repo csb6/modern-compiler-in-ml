@@ -141,13 +141,13 @@ TYDECS : TYDECS TYPE ID EQ TY ({name=addSymbol ID, ty=TY, pos=defaultPos}::TYDEC
        | TYPE ID EQ TY        ([{name=addSymbol ID, ty=TY, pos=defaultPos}])
 
 VARDEC : VAR ID ASSIGN EXP          (A.VarDec {name=addSymbol ID, escape=ref false, typ=NONE, init=EXP, pos=defaultPos})
-       | VAR ID COLON ID ASSIGN EXP (A.VarDec {name=addSymbol ID1, escape=ref false, typ=SOME (addSymbol ID2, ID2left), init=EXP, pos=defaultPos})
+       | VAR ID COLON ID ASSIGN EXP (A.VarDec {name=addSymbol ID1, escape=ref false, typ=SOME (addSymbol ID2), init=EXP, pos=defaultPos})
 
 FUNDECS : FUNDECS FUNDEC (FUNDEC::FUNDECS)
         | FUNDEC         ([FUNDEC])
 
 FUNDEC : FUNCTION ID LPAREN TYFIELDS RPAREN EQ EXP          ({name=addSymbol ID, params=TYFIELDS, result=NONE, body=EXP, pos=defaultPos})
-       | FUNCTION ID LPAREN TYFIELDS RPAREN COLON ID EQ EXP ({name=addSymbol ID1, params=TYFIELDS, result=SOME (addSymbol ID2, ID2left), body=EXP, pos=defaultPos})
+       | FUNCTION ID LPAREN TYFIELDS RPAREN COLON ID EQ EXP ({name=addSymbol ID1, params=TYFIELDS, result=SOME (addSymbol ID2), body=EXP, pos=defaultPos})
 
 (* Type Declarations *)
 
