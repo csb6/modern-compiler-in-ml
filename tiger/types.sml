@@ -16,19 +16,15 @@ structure Types = struct
     | ty'                        => ty'
   )
 
-  fun equivTypes (a, b) = (case (a, b) of
-      (NIL,                     NIL)                      => true
-    | (INT,                     INT)                      => true
-    | (STRING,                  STRING)                   => true
-    | (UNIT,                    UNIT)                     => true
-    | (NAME (_, refA),          NAME (_, refB))           => refA = refB
-    | (NAME (_, ref (SOME a')), _)                        => equivTypes (a', b)
-    | (_,                       NAME (_, ref (SOME b')))  => equivTypes (a, b')
-    | (ARRAY (_, uniqA),        ARRAY (_, uniqB))         => uniqA = uniqB
-    | (NIL,                     RECORD _)                 => true
-    | (RECORD _,                NIL)                      => true
-    | (RECORD (_, uniqA),       RECORD (_, uniqB))        => uniqA = uniqB
-    | _                                                   => false
+  fun equivTypes (a, b) = (case (getActualType a, getActualType b) of
+      (INT,                     INT)                     => true
+    | (STRING,                  STRING)                  => true
+    | (UNIT,                    UNIT)                    => true
+    | (ARRAY (_, uniqA),        ARRAY (_, uniqB))        => uniqA = uniqB
+    | (RECORD (_, uniqA),       RECORD (_, uniqB))       => uniqA = uniqB
+    | (NIL,                     RECORD _)                => true
+    | (RECORD _,                NIL)                     => true
+    | _                                                  => false
   )
 
   val != = fn (a, b) => not (equivTypes (a, b))
