@@ -151,7 +151,8 @@ structure Semantic = struct
                                 raiseErrorArgs pos "Field %d in expression of type '%s' has type '%s', but the expected type is '%s'"
                                     [Format.INT i, Format.ATOM recordTypeSym, typeToFormatStr actualType, typeToFormatStr expectedType]
                     end
-                  | nonRecordType => raiseErrorArgs pos "Record expression has non-record type: '%s'" [typeToFormatStr nonRecordType]
+                  | _             =>
+                        raiseErrorArgs pos "Record expression has non-record type: '%s'" [typeToFormatStr declaredType]
                 )
               | NONE              =>
                     raiseErrorArgs pos "Missing definition for record type: '%s'" [Format.ATOM recordTypeSym]
@@ -169,9 +170,9 @@ structure Semantic = struct
                             raiseError pos "Size expression of array must have type 'int'"
                         else declaredType
                     end
-                  | nonArrayType =>
+                  | _             =>
                         raiseErrorArgs pos "Initialization expression of array has non-array type '%s'"
-                            [typeToFormatStr nonArrayType]
+                            [typeToFormatStr declaredType]
                 )
               | NONE              =>
                     raiseErrorArgs pos "Missing definition for array type: '%s'" [Format.ATOM arrTypeSym]
