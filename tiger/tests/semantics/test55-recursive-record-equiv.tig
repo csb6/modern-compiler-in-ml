@@ -1,0 +1,11 @@
+/* a and b are equivalent even though their right-hand sides are different */
+let
+    type recordtype = {a: int, b: recordtype}
+    type a = recordtype
+    type b = a
+
+    var varA := a { a=0, b=nil }
+    var varB: b := varA
+in
+    varB
+end

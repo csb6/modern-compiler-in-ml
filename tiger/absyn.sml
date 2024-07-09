@@ -14,7 +14,7 @@ and exp = VarExp of var
         | OpExp of {left: exp, oper: oper, right: exp, pos: pos}
         | RecordExp of {fields: (symbol * exp * pos) list,
                         typ: symbol, pos: pos}
-        | SeqExp of (exp * pos) list
+        | SeqExp of exp list
         | AssignExp of {var: var, exp: exp, pos: pos}
         | IfExp of {test: exp, then': exp, else': exp option, pos: pos}
         | WhileExp of {test: exp, body: exp, pos: pos}
@@ -79,7 +79,7 @@ and expToString lvl e = case e of
   | CallExp {func=symbol, args=_, pos=_} => (Atom.toString symbol) ^ "()" (* TODO args *)
   | OpExp {left=left, oper=oper, right=right, pos=_} => "(" ^ (expToString (lvl+1) left) ^ (opToString oper) ^ (expToString (lvl+1) right) ^ ")"
   | RecordExp {fields=_, typ=_, pos=_} => "recordexp" (* TODO recordexp *)
-  | SeqExp seq => "\n" ^ (String.concatWith ";\n" (map (fn (ex, _) => (indent lvl) ^ expToString (lvl+1) ex) seq)) ^ "\n"
+  | SeqExp seq => "\n" ^ (String.concatWith ";\n" (map (fn ex => (indent lvl) ^ expToString (lvl+1) ex) seq)) ^ "\n"
   | AssignExp {var=var, exp=exp, pos=_} => "(" ^ (varToString (lvl+1) var) ^ ":=" ^ (expToString (lvl+1) exp) ^ ")"
   | IfExp {test=test, then'=then', else'=else', pos=_} =>
           "(if " ^ (expToString (lvl+1) test) ^ " then " ^ (expToString (lvl+1) then')

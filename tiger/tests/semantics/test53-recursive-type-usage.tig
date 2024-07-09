@@ -1,0 +1,10 @@
+/* check that recursive types have their actual definitions set */
+let
+    type a = { field1: int, field2: b }
+    type b = { field1: string }
+
+    var foo := a { field1=0, field2=b {field1="bar"} }
+in
+    foo.field1 := 2;
+    foo.field2 := b {field1="foo"}
+end

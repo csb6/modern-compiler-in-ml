@@ -21,7 +21,7 @@ end
 
 %nonterm START of A.exp | DECS of A.dec list | VARDEC of A.dec | TYDECS of A.tydec list
     | FUNDECS of A.fundec list | FUNDEC of A.fundec | TYFIELDS of A.field list | TYFIELDLIST of A.field list | TY of A.ty
-    | EXP of A.exp | LVALUE of A.var | NOVAL of A.exp | SEQEXP of (A.exp * A.pos) list
+    | EXP of A.exp | LVALUE of A.var | NOVAL of A.exp | SEQEXP of A.exp list
     | FUNARGS of A.exp list | FUNCALL of A.exp | LETEXP of A.exp | UNARYEXP of A.exp | BINEXP of A.exp
     | ASSIGNEXP of A.exp | RECORDCREATE of A.exp | FIELDS of (A.symbol * A.exp * pos) list | ARRAYCREATE of A.exp | IFELSEEXP of A.exp
     | WHILEEXP of A.exp | FOREXP of A.exp | ARRAYLVALUE of A.var
@@ -117,8 +117,8 @@ FUNARGS : FUNARGS COMMA EXP (EXP::FUNARGS)
 
 (* Compound expressions *)
 
-SEQEXP : SEQEXP SEMICOLON EXP ((EXP, EXPleft)::SEQEXP)
-       | EXP SEMICOLON EXP    ([(EXP2, EXP2left), (EXP1, EXP1left)])
+SEQEXP : SEQEXP SEMICOLON EXP (EXP::SEQEXP)
+       | EXP SEMICOLON EXP    ([EXP2, EXP1])
 
 IFELSEEXP : IF EXP THEN EXP ELSE EXP (A.IfExp {test=EXP1, then'=EXP2, else'=SOME EXP3, pos=defaultPos})
           | IF EXP THEN EXP          (A.IfExp {test=EXP1, then'=EXP2, else'=NONE, pos=defaultPos})

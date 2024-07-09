@@ -1,0 +1,36 @@
+/* Type synonyms are allowed in argument lists and in return types */
+let
+    type recordtype = { a: int }
+    type a = recordtype
+    type b = recordtype
+
+    function g0(foo: a): a = foo
+    function g1(foo: a): recordtype = foo
+    function g2(foo: recordtype): recordtype = foo
+    function g3(foo: recordtype): a = foo
+    function g4(foo: b): b = foo
+    function g5(foo: b): a = foo
+
+    var bar0: recordtype := nil
+    var bar1: a := nil
+    var bar2: b := nil
+in
+    g0(bar0);
+    g0(bar1);
+    g0(bar2);
+    g1(bar0);
+    g1(bar1);
+    g1(bar2);
+    g2(bar0);
+    g2(bar1);
+    g2(bar2);
+    g3(bar0);
+    g3(bar1);
+    g3(bar2);
+    g4(bar0);
+    g4(bar1);
+    g4(bar2);
+    g5(bar0);
+    g5(bar1);
+    g5(bar2)
+end
