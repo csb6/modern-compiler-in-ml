@@ -13,11 +13,11 @@ structure Env = struct
     val exists = AtomMap.exists
     val all = AtomMap.all
 
-    val baseTypeEnv = foldl (fn ((sym, ty), m) => insert(m, sym, ty)) empty
+    val baseTypeEnv = foldl insert' empty
         [(Atom.atom "int",    Types.INT),
          (Atom.atom "string", Types.STRING)]
 
-    val baseVarEnv = foldl (fn ((sym, entry), m) => insert(m, sym, entry)) empty
+    val baseVarEnv = foldl insert' empty
         [(Atom.atom "print",     FunEntry {formals=[Types.STRING],                       result=Types.UNIT}),
          (Atom.atom "flush",     FunEntry {formals=[],                                   result=Types.UNIT}),
          (Atom.atom "getchar",   FunEntry {formals=[],                                   result=Types.STRING}),
